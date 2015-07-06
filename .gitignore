@@ -1,0 +1,13 @@
+.gradle
+/local.properties
+.DS_Store
+.metadata/
+.recommenders/
+.settings/
+bin/
+build/
+gen/
+local.properties
+crashlytics.properties
+crashlytics-build.properties
+com_crashlytics_export_strings.xml
