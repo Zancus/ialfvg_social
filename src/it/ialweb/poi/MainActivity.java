@@ -1,5 +1,7 @@
 package it.ialweb.poi;
 
+import com.shephertz.app42.paas.sdk.android.App42API;
+
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -29,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_main);
 		
 		setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
-
+		  
 		tabLayout = (TabLayout) findViewById(R.id.tabLayout);
 		viewPager = (ViewPager) findViewById(R.id.pager);
 
