@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.support.v7.widget.Toolbar;
+import android.test.ActivityTestCase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
