@@ -1,5 +1,7 @@
 package it.ialweb.poi;
 
+import it.ialweb.poi.barks.BarksFragment;
+
 import com.shephertz.app42.paas.sdk.android.App42API;
 
 import android.os.Bundle;
@@ -46,7 +48,18 @@ public class MainActivity extends AppCompatActivity {
 
 			@Override
 			public Fragment getItem(int position) {
-				return new PlaceHolder();
+				switch(position)
+				{
+				case 0: 
+					return BarksFragment.newInstance();
+				case 1:
+					return new PlaceHolder();
+				case 2:
+					return new PlaceHolder();
+				default: 
+					return null;
+				}
+				
 			}
 
 			@Override
