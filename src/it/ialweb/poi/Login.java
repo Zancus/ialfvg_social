@@ -3,6 +3,7 @@ package it.ialweb.poi;
 import com.shephertz.app42.paas.sdk.android.App42CallBack;
 import com.shephertz.app42.paas.sdk.android.user.User;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -53,12 +54,18 @@ public class Login extends Activity {
 	
 	private void DoLogin(String u, String p){
 		
+		final ProgressDialog spinner = new ProgressDialog(this);
+		spinner.setTitle("Loading..");
+		spinner.show();
 		BarkerServices.instance().userService.authenticate(u, p, new App42CallBack() {
+			
 		public void onSuccess(Object response)
-		{
+		{	
+			spinner.dismiss();
 			User user = (User)response;
 			System.out.println("userName is " + user.getUserName());  
 			System.out.println("sessionId is " + user.getSessionId());  
+			
 			Intent vIntent = new Intent(Login.this, MainActivity.class);
 			startActivity(vIntent);
 		}

@@ -1,7 +1,6 @@
 package it.ialweb.poi;
 
 import com.shephertz.app42.paas.sdk.android.App42CallBack;
-import com.shephertz.app42.paas.sdk.android.user.User;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
