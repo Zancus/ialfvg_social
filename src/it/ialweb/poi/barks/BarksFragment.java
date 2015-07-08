@@ -8,9 +8,12 @@ import com.shephertz.app42.paas.sdk.android.storage.Storage;
 
 import it.ialweb.models.Bark;
 import it.ialweb.poi.BarkerServices;
+
 import it.ialweb.poi.R;
 import it.ialweb.poi.Tools;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +24,11 @@ import android.widget.Toast;
 public class BarksFragment extends Fragment {
 
 	public static final String TAG = "barksfragment";
-	
+
+	private RecyclerView rvbarks;
+	private ArrayList<Bark> barks = new ArrayList<Bark>();
+	private BarkAdapter barksadapter;
+
 	
 	public static BarksFragment newInstance()
 	{
@@ -59,9 +66,19 @@ public class BarksFragment extends Fragment {
 		});
 		
 		
-		
+		rvbarks = (RecyclerView) barksview.findViewById(R.id.rvbarks);
+		LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+		rvbarks.setLayoutManager(llm);
+		getBarks();
+		barksadapter = new BarkAdapter(getActivity(), barks);
+		rvbarks.setAdapter(barksadapter);
+
 		return barksview;
 	}
 	
+	private void getBarks()
+	{
+		
+	}
 	
 }

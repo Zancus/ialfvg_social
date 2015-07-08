@@ -11,8 +11,7 @@
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
 	    android:id="@+id/rvbarks"
-	    tools:listitem="@layout/bark"
-    />
+		tools:listitem="@layout/bark" />
     
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabBtn"
@@ -21,5 +20,5 @@
         android:layout_gravity="bottom|right"
         android:src="@drawable/ic_add_white_24dp"
         app:fabSize="normal" />
-        
+ 
 </RelativeLayout>
