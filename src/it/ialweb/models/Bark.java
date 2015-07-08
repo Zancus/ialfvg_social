@@ -5,7 +5,9 @@ import java.util.Date;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Bark {
+import android.support.v4.os.ParcelableCompat;
+
+public class Bark extends ParcelableCompat{
 
 	public static final String collectionName = "barks";
 	
@@ -13,6 +15,13 @@ public class Bark {
 	public static final String TAG_MESSAGE = "messsage";
 	public static final String TAG_DATE = "date";
 	
+	public Bark(String userId, String message, Date date) {
+		super();
+		this.userId = userId;
+		this.message = message;
+		this.date = date;
+	}
+
 	public String userId;
 	public String message;
 	public Date date;
