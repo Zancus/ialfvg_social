@@ -1,6 +1,7 @@
 package it.ialweb.poi;
 
 import com.shephertz.app42.paas.sdk.android.App42CallBack;
+import com.shephertz.app42.paas.sdk.android.App42Exception;
 import com.shephertz.app42.paas.sdk.android.user.User;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -37,8 +38,7 @@ public class Login extends Activity {
 					DoLogin(eUser.getText().toString(), ePass.getText().toString());
 				else
 					Toast.makeText(getApplicationContext(), "Recheck:" + error, Toast.LENGTH_SHORT).show();
-		 
-			}
+		 	}
 		});
 		
 		bRegistration.setOnClickListener(new View.OnClickListener() {
@@ -47,7 +47,7 @@ public class Login extends Activity {
 			public void onClick(View v) {
 				
 				Intent vIntent = new Intent(Login.this, Registration.class);
-				startActivity(vIntent);
+				startActivityForResult(vIntent, 0);
 			}
 		});
 	}//create
@@ -62,20 +62,29 @@ public class Login extends Activity {
 		public void onSuccess(Object response)
 		{	
 			spinner.dismiss();
-			User user = (User)response;
-			System.out.println("userName is " + user.getUserName());  
-			System.out.println("sessionId is " + user.getSessionId());  
 			
 			Intent vIntent = new Intent(Login.this, MainActivity.class);
 			startActivity(vIntent);
 		}
 		public void onException(final Exception ex) 
 		{
-			runOnUiThread(new Runnable() {
-				public void run() {
-					Toast.makeText(getApplicationContext(), "" + ex.getMessage().toString(), Toast.LENGTH_SHORT).show();
+		 spinner.dismiss();
+		 runOnUiThread(new Runnable() {
+			public void run() {
+				
+				String error = "";
+				App42Exception exception = (App42Exception)ex;
+				int appErrorCode  = exception.getAppErrorCode();  
+				
+				switch (appErrorCode) 
+				{
+					case 2002: error = error+" Username/Password did not match"; break;
+					default: error = error + ex.getMessage().toString();
 				}
-			});
+				
+				Toast.makeText(getApplicationContext(), "" + error, Toast.LENGTH_SHORT).show();
+			}
+		 });
 		}
 		});
 

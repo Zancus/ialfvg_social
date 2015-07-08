@@ -7,7 +7,7 @@ import com.shephertz.app42.paas.sdk.android.user.UserService;
 public class BarkerServices {
 	public UserService userService;
 	public StorageService storageService;
-	
+		
 	private static BarkerServices mInstance = null;
 	
 	private BarkerServices() {
@@ -16,9 +16,9 @@ public class BarkerServices {
 	}
 
 	public static BarkerServices instance() {
-		if (mInstance == null) {
+		if (mInstance == null) 
 			mInstance = new BarkerServices();
-		}
+		
 		return mInstance;
 	}
 }
