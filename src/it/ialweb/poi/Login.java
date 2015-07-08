@@ -2,20 +2,20 @@ package it.ialweb.poi;
 
 import com.shephertz.app42.paas.sdk.android.App42CallBack;
 import com.shephertz.app42.paas.sdk.android.user.User;
-import com.shephertz.app42.paas.sdk.android.user.UserService;
-
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class Login extends Activity {
 	Button bLogin, bRegistration;
 	EditText eUser, ePass;
-	UserService userService;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -29,26 +29,46 @@ public class Login extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				
-				if(!eUser.getText().toString().equals("") && !ePass.getText().toString().equals(""))
+				String error = "";
+				if(eUser.getText().toString().equals(""))  error = error+" username";
+				if(ePass.getText().toString().equals(""))  error = error+" password";
+				if(error.equals(""))
 					DoLogin(eUser.getText().toString(), ePass.getText().toString());
+				else
+					Toast.makeText(getApplicationContext(), "Recheck:" + error, Toast.LENGTH_SHORT).show();
+		 
+			}
+		});
+		
+		bRegistration.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				Intent vIntent = new Intent(Login.this, Registration.class);
+				startActivity(vIntent);
 			}
 		});
 	}//create
 	
 	private void DoLogin(String u, String p){
 		
-		
-		userService.authenticate(u, p, new App42CallBack() {
+		BarkerServices.instance().userService.authenticate(u, p, new App42CallBack() {
 		public void onSuccess(Object response)
 		{
 			User user = (User)response;
 			System.out.println("userName is " + user.getUserName());  
 			System.out.println("sessionId is " + user.getSessionId());  
+			Intent vIntent = new Intent(Login.this, MainActivity.class);
+			startActivity(vIntent);
 		}
-		public void onException(Exception ex) 
+		public void onException(final Exception ex) 
 		{
-			System.out.println("Exception Message : "+ex.getMessage());
+			runOnUiThread(new Runnable() {
+				public void run() {
+					Toast.makeText(getApplicationContext(), "" + ex.getMessage().toString(), Toast.LENGTH_SHORT).show();
+				}
+			});
 		}
 		});
 
