@@ -1,6 +1,7 @@
 package it.ialweb.poi;
 
 import com.shephertz.app42.paas.sdk.android.App42API;
+import com.shephertz.app42.paas.sdk.android.user.User;
 
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
