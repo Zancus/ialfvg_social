@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
 
 	private TabLayout tabLayout;
 	private ViewPager viewPager;
-	private BarksFragment barksfragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,20 +51,10 @@ public class MainActivity extends AppCompatActivity {
 
 			@Override
 			public Fragment getItem(int position) {
-				FragmentManager fragmentmanager = getSupportFragmentManager();
+				
 				switch (position) {
 					case 0:
-					{
-						if(fragmentmanager.findFragmentByTag(BarksFragment.TAG) == null)
-							barksfragment = BarksFragment.newInstance();
-						else
-							barksfragment = (BarksFragment) fragmentmanager.findFragmentByTag(BarksFragment.TAG);
-					}
-					
-					fragmentmanager.
-					beginTransaction().
-					replace(adapter, barksfragment, BarksFragment.TAG).commit();
-						return barksfragment;
+						return BarksFragment.newInstance();
 					case 1:
 						return new PlaceHolder();
 					case 2:
