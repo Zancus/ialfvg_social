@@ -1,6 +1,6 @@
-package it.ialweb.poi.users;
+package it.barker.users;
 
-import it.ialweb.poi.R;
+import it.barker.R;
 
 import java.util.ArrayList;
 
@@ -29,27 +29,27 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserVH>{
 	public class UserVH extends ViewHolder {
 
 		CardView cvuser;
-		TextView username;
+		TextView username, emailuser;
 		
 		public UserVH(View arg0) {
 			super(arg0);
-			// TODO Auto-generated constructor stub
 			cvuser = (CardView) arg0.findViewById(R.id.cvuser);
 			username = (TextView) arg0.findViewById(R.id.userrname);
+			emailuser = (TextView) arg0.findViewById(R.id.emailuser);
 		}
 
 	}
 
 	@Override
 	public int getItemCount() {
-		// TODO Auto-generated method stub
 		return users.size();
 	}
 
 	@Override
 	public void onBindViewHolder(UserVH arg0, int arg1) {
 		// TODO Auto-generated method stub
-		arg0.username.setText(users.get(arg1).userName);
+		arg0.username.setText(users.get(arg1).getUserName());
+		arg0.emailuser.setText(users.get(arg1).getEmail());
 	}
 
 	@Override

@@ -1,16 +1,20 @@
-package it.ialweb.poi.barks;
+package it.barker.barks;
+
+import java.util.Date;
 
 import com.shephertz.app42.paas.sdk.android.App42CallBack;
+import com.shephertz.app42.paas.sdk.android.user.User;
 
-import it.ialweb.models.Bark;
-import it.ialweb.poi.BarkerServices;
-import it.ialweb.poi.R;
-import it.ialweb.poi.Tools;
+import it.barker.barker.BarkerServices;
+import it.barker.barker.Tools;
+import it.barker.models.Bark;
+import it.barker.R;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -37,13 +41,13 @@ public class ReBarkDialog extends DialogFragment {
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		LayoutInflater inflater = LayoutInflater.from(getActivity());
-		View dialog = inflater.inflate(R.layout.rebark, null);
+		final View dialog = inflater.inflate(R.layout.rebark, null);
 		rebark = (Button) dialog.findViewById(R.id.btnRebark);
 		Bundle getBundle = getArguments();
 		if(getBundle != null)
 		{
 			final Bark bark =getBundle.getParcelable("bark");
-			
+			Bark newbark = new Bark("utente corrente", bark.message, bark.date);
 			rebark.setOnClickListener(new OnClickListener() {
 				
 				@Override
@@ -55,7 +59,7 @@ public class ReBarkDialog extends DialogFragment {
 								@Override
 								public void onSuccess(Object arg0) {
 									// TODO Auto-generated method stub
-									
+									Snackbar.make(dialog, "Rebarkato!", Snackbar.LENGTH_SHORT).show();
 								}
 								
 								@Override
