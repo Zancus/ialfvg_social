@@ -1,19 +1,22 @@
 package it.ialweb.poi.barks;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.shephertz.app42.paas.sdk.android.App42CallBack;
 import com.shephertz.app42.paas.sdk.android.storage.Storage;
 
-
 import it.ialweb.models.Bark;
 import it.ialweb.poi.BarkerServices;
-
 import it.ialweb.poi.R;
+import it.ialweb.poi.Tools;
 
 import android.os.Bundle;
-import it.ialweb.poi.Tools;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,8 +33,7 @@ public class BarksFragment extends Fragment {
 	public static final String TAG = "barksfragment";
 
 	private RecyclerView rvbarks;
-	private ArrayList<Bark> barks = new ArrayList<Bark>();
-	private BarkAdapter barksadapter;
+	private BarkAdapter barksAdapter;
 
 	
 	
@@ -51,16 +53,12 @@ public class BarksFragment extends Fragment {
 				BarkerServices.instance().storageService.insertJSONDocument(
 						Tools.dbName, Bark.collectionName, bark.getJSON(), new App42CallBack() {
 							public void onSuccess(Object response) {
-							    Storage storage = (Storage) response;
-							    ArrayList<Storage.JSONDocument> jsonDocList = storage.getJsonDocList();
-							    for(int i = 0; i < jsonDocList.size(); i++) {
-							        System.out.println("objectId is " + jsonDocList.get(i).getDocId());
-							        //Above line will return object id of saved JSON object
-							        System.out.println("CreatedAt is " + jsonDocList.get(i).getCreatedAt());
-							        System.out.println("UpdatedAtis " + jsonDocList.get(i).getUpdatedAt());
-							        System.out.println("Jsondoc is " + jsonDocList.get(i).getJsonDoc());
-							    }
-							    //Toast.makeText(getActivity(), "Messaggio salvato", Toast.LENGTH_SHORT).show();
+							    getActivity().runOnUiThread(new Runnable() {
+									@Override
+									public void run() {
+										getBarks();
+									}
+								});
 							}
 							public void onException(Exception ex) {
 								Toast.makeText(getActivity(), "Non riesco a salvare il messaggio", Toast.LENGTH_SHORT).show();
@@ -75,18 +73,48 @@ public class BarksFragment extends Fragment {
 		LinearLayoutManager llm = new LinearLayoutManager(getActivity());
 		rvbarks.setLayoutManager(llm);
 		getBarks();
-		barksadapter = new BarkAdapter(getActivity(), barks);
-		rvbarks.setAdapter(barksadapter);
+		rvbarks.setAdapter(null);
 
 		return barksview;
 	}
 
 	private void getBarks()
 	{
-		Date d = new Date();
-		barks.add(new Bark("GrandoTunzTunz94", "Se non abbaio guarda!", d));
-		barks.add(new Bark("GrandoTunzTunz94", "Se non abbaio guarda!", d));
-		barks.add(new Bark("GrandoTunzTunz94", "Se non abbaio guarda!", d));
+		BarkerServices.instance().storageService.findAllDocuments(
+				Tools.dbName, Bark.collectionName, new App42CallBack() {  
+			public void onSuccess(Object response)
+			{
+			    Storage  storage  = (Storage )response;
+			    ArrayList<Storage.JSONDocument> jsonDocList = storage.getJsonDocList();
+			    ArrayList<Bark> barks = new ArrayList<Bark>();
+			    Bark bark;
+			    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+			    
+			    for(int i=0;i<jsonDocList.size();i++)
+			    {
+			        try {
+						JSONObject jsonObject = new JSONObject(jsonDocList.get(i).getJsonDoc());
+						bark = new Bark(jsonObject.getString(Bark.TAG_USERID),
+								jsonObject.getString(Bark.TAG_MESSAGE),
+								df.parse(jsonObject.getString(Bark.TAG_DATE)));
+						barks.add(bark);
+					} catch (JSONException e) {
+						e.printStackTrace();
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+			    }
+			    barksAdapter = new BarkAdapter(getActivity(), barks);
+			    getActivity().runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						rvbarks.setAdapter(barksAdapter);						
+					}
+				});
+			}  
+			public void onException(Exception ex) {  
+			    System.out.println("Exception Message"+ex.getMessage());          
+			}  
+			});
 	}
-	
 }
