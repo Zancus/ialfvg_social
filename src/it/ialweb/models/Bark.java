@@ -5,9 +5,11 @@ import java.util.Date;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v4.os.ParcelableCompat;
 
-public class Bark extends ParcelableCompat{
+public class Bark implements Parcelable{
 
 	public static final String collectionName = "barks";
 	
@@ -35,5 +37,19 @@ public class Bark extends ParcelableCompat{
 		} catch (JSONException e) {	e.printStackTrace(); }
 		
 		return jsonObject.toString();
+	}
+
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		// TODO Auto-generated method stub
+		dest.writeString(userId);
+		dest.writeString(message);
+		dest.writeString("" + date);
 	}
 }
