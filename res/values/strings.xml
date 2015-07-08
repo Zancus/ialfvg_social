@@ -10,5 +10,6 @@
     <string name="Timeline">Timeline</string>
     <string name="Users">Users</string>
     <string name="MyProfile">My profile</string>
+    <string name="title_activity_login">Login</string>
 
 </resources>
