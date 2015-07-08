@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v4.os.ParcelableCompat;
+import android.view.View.OnClickListener;
 
 public class Bark implements Parcelable{
 
@@ -52,4 +53,5 @@ public class Bark implements Parcelable{
 		dest.writeString(message);
 		dest.writeString("" + date);
 	}
+
 }

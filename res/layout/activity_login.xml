@@ -45,7 +45,8 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/eUsername"
         android:layout_below="@+id/textView2"
-        android:ems="10" />
+        android:ems="10"
+        android:inputType="textPassword" />
 
     <Button
         android:id="@+id/bRegistration"
