@@ -1,6 +1,7 @@
 package it.ialweb.poi;
 
 import it.ialweb.poi.barks.BarksFragment;
+import it.ialweb.poi.users.UsersFragment;
 
 import com.shephertz.app42.paas.sdk.android.App42API;
 import com.shephertz.app42.paas.sdk.android.user.User;
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 					case 0:
 						return BarksFragment.newInstance();
 					case 1:
-						return new PlaceHolder();
+						return UsersFragment.newInstance();
 					case 2:
 						return new PlaceHolder();
 					default:

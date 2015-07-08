@@ -15,12 +15,12 @@ import android.view.ViewGroup;
 import android.webkit.WebView.FindListener;
 import android.widget.TextView;
 
-public class BarksAdapter extends RecyclerView.Adapter<BarksAdapter.BarkVH> {
+public class BarkAdapter extends RecyclerView.Adapter<BarkAdapter.BarkVH> {
 
 	private Context context;
 	private ArrayList<Bark> barks;
 	
-	public BarksAdapter(Context context, ArrayList<Bark> barks) {
+	public BarkAdapter(Context context, ArrayList<Bark> barks) {
 		super();
 		this.context = context;
 		this.barks = barks;

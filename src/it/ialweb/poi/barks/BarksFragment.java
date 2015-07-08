@@ -14,10 +14,10 @@ import android.view.ViewGroup;
 
 public class BarksFragment extends Fragment {
 
-	public static final String TAG = "barksfragment";
 	private RecyclerView rvbarks;
 	private ArrayList<Bark> barks = new ArrayList<Bark>();
-	private BarksAdapter barksadapter;
+	private BarkAdapter barksadapter;
+	
 	public static BarksFragment newInstance()
 	{
 		return new BarksFragment();
@@ -32,7 +32,7 @@ public class BarksFragment extends Fragment {
 		LinearLayoutManager llm = new LinearLayoutManager(getActivity());
 		rvbarks.setLayoutManager(llm);
 		getBarks();
-		barksadapter = new BarksAdapter(getActivity(), barks);
+		barksadapter = new BarkAdapter(getActivity(), barks);
 		rvbarks.setAdapter(barksadapter);
 		return barksview;
 	}
@@ -41,6 +41,5 @@ public class BarksFragment extends Fragment {
 	{
 		
 	}
-	
 	
 }
