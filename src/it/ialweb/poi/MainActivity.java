@@ -74,14 +74,6 @@ public class MainActivity extends AppCompatActivity {
 		viewPager.setAdapter(adapter);
 
 		tabLayout.setupWithViewPager(viewPager);
-
-		findViewById(R.id.fabBtn).setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Snackbar.make(findViewById(R.id.coordinator), "abcdefg",
-						Snackbar.LENGTH_LONG).show();
-			}
-		});
 	}
 
 	public static class PlaceHolder extends Fragment {

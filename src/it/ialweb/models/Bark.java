@@ -17,12 +17,18 @@ public class Bark {
 	public String message;
 	public Date date;
 	
+	public Bark(String userId, String message, Date date) {
+		this.userId = userId;
+		this.message = message;
+		this.date = date;
+	}
+	
 	public String getJSON() {
 		JSONObject jsonObject = new JSONObject();
 		try {
 			jsonObject.put(TAG_USERID, userId);
 			jsonObject.put(TAG_MESSAGE, message);
-			jsonObject.put(TAG_DATE, date);
+			jsonObject.put(TAG_DATE, com.shephertz.app42.paas.sdk.android.util.Util.getUTCFormattedTimestamp(date));
 		} catch (JSONException e) {	e.printStackTrace(); }
 		
 		return jsonObject.toString();
