@@ -31,7 +31,7 @@ public class Bark extends ParcelableCompat{
 		try {
 			jsonObject.put(TAG_USERID, userId);
 			jsonObject.put(TAG_MESSAGE, message);
-			jsonObject.put(TAG_DATE, date);
+			jsonObject.put(TAG_DATE, com.shephertz.app42.paas.sdk.android.util.Util.getUTCFormattedTimestamp(date));
 		} catch (JSONException e) {	e.printStackTrace(); }
 		
 		return jsonObject.toString();
