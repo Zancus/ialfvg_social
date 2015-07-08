@@ -49,4 +49,5 @@ public class Bark implements Parcelable{
 		dest.writeString(message);
 		dest.writeString("" + date);
 	}
+
 }

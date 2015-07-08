@@ -12,12 +12,16 @@
 	    android:layout_height="match_parent"
 	    android:id="@+id/rvbarks"
 		tools:listitem="@layout/bark" />
-    
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="115dp"
+        android:layout_marginRight="14dp"
+        app:layout_anchor="@id/rvbarks"
         android:src="@drawable/ic_add_white_24dp"
         app:fabSize="normal" />
  
