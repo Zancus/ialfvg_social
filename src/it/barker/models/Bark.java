@@ -1,4 +1,4 @@
-package it.ialweb.models;
+package it.barker.models;
 
 import java.util.Date;
 

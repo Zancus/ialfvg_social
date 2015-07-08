@@ -1,6 +1,6 @@
-package it.ialweb.poi.users;
+package it.barker.users;
 
-import it.ialweb.poi.R;
+import it.barker.R;
 
 import java.util.ArrayList;
 

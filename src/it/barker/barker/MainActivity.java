@@ -1,7 +1,8 @@
-package it.ialweb.poi;
+package it.barker.barker;
 
-import it.ialweb.poi.barks.BarksFragment;
-import it.ialweb.poi.users.UsersFragment;
+import it.barker.barks.BarksFragment;
+import it.barker.users.UsersFragment;
+import it.barker.R;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;

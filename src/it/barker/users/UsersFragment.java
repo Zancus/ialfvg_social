@@ -1,28 +1,16 @@
-package it.ialweb.poi.users;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+package it.barker.users;
 import java.util.ArrayList;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.shephertz.app42.paas.sdk.android.App42CallBack;
-import com.shephertz.app42.paas.sdk.android.storage.Storage;
 import com.shephertz.app42.paas.sdk.android.user.User;
 
-import it.ialweb.models.Bark;
-import it.ialweb.poi.BarkerServices;
-import it.ialweb.poi.R;
-import it.ialweb.poi.Tools;
-import it.ialweb.poi.barks.BarkAdapter;
+import it.barker.R;
+import it.barker.barker.BarkerServices;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

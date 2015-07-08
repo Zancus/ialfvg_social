@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="it.ialweb.poi"
+    package="it.barker"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -11,19 +11,19 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name="it.ialweb.poi.BarkerApplication"
+        android:name="it.barker.barker.BarkerApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name="it.barker.barker.MainActivity"
             android:label="@string/app_name" >
           
         </activity>
-        <activity android:name=".DetailActivity" />
+        <activity android:name="it.barker.barker.DetailActivity" />
         <activity
-            android:name=".Login"
+            android:name="it.barker.barker.Login"
             android:label="@string/title_activity_login" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,7 +31,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Registration"
+            android:name="it.barker.barker.Registration"
             android:label="@string/title_activity_registration" >
         </activity>
     </application>
