@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 public class BarksFragment extends Fragment {
 
+	public static final String TAG = "barksfragment";
 	public static BarksFragment newInstance()
 	{
 		return new BarksFragment();

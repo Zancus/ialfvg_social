@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -26,20 +27,23 @@ public class MainActivity extends AppCompatActivity {
 
 	private TabLayout tabLayout;
 	private ViewPager viewPager;
+	private BarksFragment barksfragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
 		setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
-		  
+
 		tabLayout = (TabLayout) findViewById(R.id.tabLayout);
 		viewPager = (ViewPager) findViewById(R.id.pager);
 
-		FragmentPagerAdapter adapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
+		FragmentPagerAdapter adapter = new FragmentPagerAdapter(
+				getSupportFragmentManager()) {
 
-			private int[] titles = new int[] { R.string.Timeline, R.string.Users, R.string.MyProfile };
+			private int[] titles = new int[] { R.string.Timeline,
+					R.string.Users, R.string.MyProfile };
 
 			@Override
 			public int getCount() {
@@ -48,18 +52,28 @@ public class MainActivity extends AppCompatActivity {
 
 			@Override
 			public Fragment getItem(int position) {
-				switch(position)
-				{
-				case 0: 
-					return BarksFragment.newInstance();
-				case 1:
-					return new PlaceHolder();
-				case 2:
-					return new PlaceHolder();
-				default: 
-					return null;
+				FragmentManager fragmentmanager = getSupportFragmentManager();
+				switch (position) {
+					case 0:
+					{
+						if(fragmentmanager.findFragmentByTag(BarksFragment.TAG) == null)
+							barksfragment = BarksFragment.newInstance();
+						else
+							barksfragment = (BarksFragment) fragmentmanager.findFragmentByTag(BarksFragment.TAG);
+					}
+					
+					fragmentmanager.
+					beginTransaction().
+					replace(adapter, barksfragment, BarksFragment.TAG).commit();
+						return barksfragment;
+					case 1:
+						return new PlaceHolder();
+					case 2:
+						return new PlaceHolder();
+					default:
+						return null;
 				}
-				
+
 			}
 
 			@Override
@@ -74,35 +88,45 @@ public class MainActivity extends AppCompatActivity {
 		findViewById(R.id.fabBtn).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Snackbar.make(findViewById(R.id.coordinator), "abcdefg", Snackbar.LENGTH_LONG).show();
+				Snackbar.make(findViewById(R.id.coordinator), "abcdefg",
+						Snackbar.LENGTH_LONG).show();
 			}
 		});
 	}
 
 	public static class PlaceHolder extends Fragment {
 		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
 			RecyclerView recyclerView = new RecyclerView(getActivity());
-			recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-			recyclerView.setAdapter(new RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-				@Override
-				public int getItemCount() {
-					return 30;
-				}
+			recyclerView
+					.setLayoutManager(new LinearLayoutManager(getActivity()));
+			recyclerView
+					.setAdapter(new RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+						@Override
+						public int getItemCount() {
+							return 30;
+						}
 
-				@Override
-				public void onBindViewHolder(ViewHolder holder, int position) {
-					((TextView) holder.itemView).setText("Item " + position);
-				}
+						@Override
+						public void onBindViewHolder(ViewHolder holder,
+								int position) {
+							((TextView) holder.itemView).setText("Item "
+									+ position);
+						}
 
-				@Override
-				public ViewHolder onCreateViewHolder(ViewGroup parent, int type) {
-					LayoutInflater layoutInflater = getActivity().getLayoutInflater();
-					View view = layoutInflater.inflate(android.R.layout.simple_list_item_1, parent, false);
-					return new ViewHolder(view) {
-					};
-				}
-			});
+						@Override
+						public ViewHolder onCreateViewHolder(ViewGroup parent,
+								int type) {
+							LayoutInflater layoutInflater = getActivity()
+									.getLayoutInflater();
+							View view = layoutInflater.inflate(
+									android.R.layout.simple_list_item_1,
+									parent, false);
+							return new ViewHolder(view) {
+							};
+						}
+					});
 			return recyclerView;
 		}
 	}
