@@ -33,7 +33,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserVH>{
 		
 		public UserVH(View arg0) {
 			super(arg0);
-			// TODO Auto-generated constructor stub
 			cvuser = (CardView) arg0.findViewById(R.id.cvuser);
 			username = (TextView) arg0.findViewById(R.id.userrname);
 		}
@@ -42,7 +41,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserVH>{
 
 	@Override
 	public int getItemCount() {
-		// TODO Auto-generated method stub
 		return users.size();
 	}
 

@@ -3,7 +3,12 @@ package it.ialweb.poi.barks;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.shephertz.app42.paas.sdk.android.App42CallBack;
+import com.shephertz.app42.paas.sdk.android.storage.Query;
+import com.shephertz.app42.paas.sdk.android.storage.QueryBuilder;
 import com.shephertz.app42.paas.sdk.android.storage.Storage;
 
 import it.ialweb.models.Bark;
@@ -55,7 +60,6 @@ public class BarksFragment extends Fragment {
 							        System.out.println("UpdatedAtis " + jsonDocList.get(i).getUpdatedAt());
 							        System.out.println("Jsondoc is " + jsonDocList.get(i).getJsonDoc());
 							    }
-							    //Toast.makeText(getActivity(), "Messaggio salvato", Toast.LENGTH_SHORT).show();
 							}
 							public void onException(Exception ex) {
 								Toast.makeText(getActivity(), "Non riesco a salvare il messaggio", Toast.LENGTH_SHORT).show();
@@ -78,7 +82,28 @@ public class BarksFragment extends Fragment {
 	
 	private void getBarks()
 	{
-		
+		BarkerServices.instance().storageService.findAllDocuments(
+				Tools.dbName, Bark.collectionName, new App42CallBack() {  
+			public void onSuccess(Object response)
+			{
+			    Storage  storage  = (Storage )response;
+			    ArrayList<Storage.JSONDocument> jsonDocList = storage.getJsonDocList();
+			    for(int i=0;i<jsonDocList.size();i++)
+			    {
+			        System.out.println("objectId is " + jsonDocList.get(i).getDocId());
+			        System.out.println("CreatedAt is " + jsonDocList.get(i).getCreatedAt());
+			        System.out.println("UpdatedAtis " + jsonDocList.get(i).getUpdatedAt());
+			        try {
+						JSONObject jsonObject = new JSONObject(jsonDocList.get(i).getJsonDoc());
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}   
+			    }   
+			}  
+			public void onException(Exception ex) {  
+			    System.out.println("Exception Message"+ex.getMessage());          
+			}  
+			});
 	}
 	
 }
