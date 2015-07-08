@@ -1,10 +1,10 @@
-package it.ialweb.poi.users;
+package it.barker.users;
 
 import java.util.ArrayList;
 
 import com.shephertz.app42.paas.sdk.android.user.User;
 
-import it.ialweb.poi.R;
+import it.barker.R;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;

@@ -1,4 +1,6 @@
-package it.ialweb.poi;
+package it.barker.barker;
+
+import it.barker.R;
 
 import com.shephertz.app42.paas.sdk.android.App42CallBack;
 import com.shephertz.app42.paas.sdk.android.user.User;

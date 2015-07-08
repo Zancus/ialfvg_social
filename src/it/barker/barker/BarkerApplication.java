@@ -1,4 +1,4 @@
-package it.ialweb.poi;
+package it.barker.barker;
 
 import com.shephertz.app42.paas.sdk.android.App42API;
 

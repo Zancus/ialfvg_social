@@ -1,7 +1,7 @@
-package it.ialweb.poi.barks;
+package it.barker.barks;
 
-import it.ialweb.models.Bark;
-import it.ialweb.poi.R;
+import it.barker.models.Bark;
+import it.barker.R;
 
 import java.util.ArrayList;
 

@@ -1,11 +1,11 @@
-package it.ialweb.poi.barks;
+package it.barker.barks;
 
 import com.shephertz.app42.paas.sdk.android.App42CallBack;
 
-import it.ialweb.models.Bark;
-import it.ialweb.poi.BarkerServices;
-import it.ialweb.poi.R;
-import it.ialweb.poi.Tools;
+import it.barker.barker.BarkerServices;
+import it.barker.barker.Tools;
+import it.barker.models.Bark;
+import it.barker.R;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
