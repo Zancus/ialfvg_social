@@ -1,5 +1,9 @@
 package it.ialweb.poi;
 
+import com.shephertz.app42.paas.sdk.android.App42CallBack;
+import com.shephertz.app42.paas.sdk.android.user.User;
+import com.shephertz.app42.paas.sdk.android.user.UserService;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,6 +15,7 @@ import android.widget.EditText;
 public class Login extends Activity {
 	Button bLogin, bRegistration;
 	EditText eUser, ePass;
+	UserService userService;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -34,8 +39,23 @@ public class Login extends Activity {
 	private void DoLogin(String u, String p){
 		
 		
+		userService.authenticate(u, p, new App42CallBack() {
+		public void onSuccess(Object response)
+		{
+			User user = (User)response;
+			System.out.println("userName is " + user.getUserName());  
+			System.out.println("sessionId is " + user.getSessionId());  
+		}
+		public void onException(Exception ex) 
+		{
+			System.out.println("Exception Message : "+ex.getMessage());
+		}
+		});
+
 	}
 
+	
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
