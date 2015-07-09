@@ -37,7 +37,7 @@ public class Registration extends Activity {
 	EditText eUser, eMail, ePass1, ePass2;
 	static final int REQUEST_IMAGE_CAPTURE = 1;
 	private static int RESULT_LOAD_IMAGE = 2;
-	static Bitmap imgProfile = null;
+	Bitmap imgProfile = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,17 +68,7 @@ public class Registration extends Activity {
 			}
 			
 			private void dispatchTakePictureIntent() {
-			    
-				/*
-				Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-			    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-			        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-			    }
-			    
-				Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(i, RESULT_LOAD_IMAGE);
-                */
-				
+			    				
 				try {
 
 			        Intent cropIntent = new Intent("com.android.camera.action.CROP");
@@ -142,15 +132,15 @@ public class Registration extends Activity {
 		BarkerServices.instance().userService.createUser(u, p, m, new App42CallBack() {  
 		public void onSuccess(Object response)   
 		{  
-			UploadFileType fileType = UploadFileType.IMAGE;  
-								
+			if(imgProfile != null) {
+				UploadFileType fileType = UploadFileType.IMAGE;  
+			
+			
 			ByteArrayOutputStream bos = new ByteArrayOutputStream(); 
-			imgProfile.compress(CompressFormat.PNG, 0 /*ignored for PNG*/, bos); 
+			imgProfile.compress(CompressFormat.PNG, 0, bos); 
 			byte[] bitmapdata = bos.toByteArray();
 			ByteArrayInputStream bs = new ByteArrayInputStream(bitmapdata);
-			
-			//InputStream inputStream = bs; 
-			
+						
 			UploadService uploadService = App42API.buildUploadService();   
 			uploadService.uploadFile(u + ".png", bs,  fileType , "descrizione", new App42CallBack() {  
 				public void onSuccess(Object response_second){
@@ -174,6 +164,7 @@ public class Registration extends Activity {
 			
 				}
 			);
+			}
 			Intent vIntent = new Intent(Registration.this, Login.class);
 			startActivity(vIntent);
 		}  
@@ -198,7 +189,7 @@ public class Registration extends Activity {
 	        Bitmap imageBitmap = (Bitmap) extras.get("data");
 	        imvProfile.setImageBitmap(imageBitmap);
 	    }
-	    if (requestCode == RESULT_LOAD_IMAGE) {
+	    if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK ) {
 	        if (data != null) {
 	            // get the returned data
 	            Bundle extras = data.getExtras();
