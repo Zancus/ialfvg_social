@@ -9,7 +9,12 @@
         android:targetSdkVersion="21" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+	
+	<uses-permission android:name="android.permission.CAMERA" />
+  	<uses-feature android:name="android.hardware.camera" />
+  	<uses-feature android:name="android.hardware.camera.autofocus" />
+  	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    
     <application
         android:name="it.barker.barker.BarkerApplication"
         android:allowBackup="true"
@@ -24,6 +29,7 @@
         <activity android:name="it.barker.barker.DetailActivity" />
         <activity
             android:name="it.barker.barker.Login"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_login" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,6 +38,7 @@
         </activity>
         <activity
             android:name="it.barker.barker.Registration"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_registration" >
         </activity>
     </application>

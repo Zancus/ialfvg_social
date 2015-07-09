@@ -29,15 +29,6 @@
         <requestFocus />
     </EditText>
 
-    <Button
-        android:id="@+id/bSign"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="90dp"
-        android:text="Sign Up" />
-
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
@@ -91,5 +82,34 @@
         android:layout_below="@+id/textView3"
         android:ems="10"
         android:inputType="textPassword" />
+
+    <ImageView
+        android:id="@+id/imvProfile_registration"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/ePass2"
+        android:layout_toLeftOf="@+id/btnUploadImage_registration"
+        android:backgroundTint="@color/abc_search_url_text"
+        android:backgroundTintMode="src_over" />
+
+    <Button
+        android:id="@+id/bSign"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="22dp"
+        android:text="Sign Up" />
+
+    <Button
+        android:id="@+id/btnUploadImage_registration"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imvProfile_registration"
+        android:layout_marginBottom="24dp"
+        android:layout_marginLeft="14dp"
+        android:layout_toRightOf="@+id/textView1"
+        android:text="Image" />
 
 </RelativeLayout>
