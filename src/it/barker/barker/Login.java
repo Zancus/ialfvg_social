@@ -19,8 +19,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class Login extends Activity {
-	protected static final String USER = null;
-	protected static final String PASSWORD = null;
+	public static final String USER = "USER";
+	public static final String PASSWORD = "PASSWORD";
 	Button bLogin, bRegistration;
 	EditText eUser, ePass;
 	
@@ -29,9 +29,9 @@ public class Login extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		
-		SharedPreferences pref = getSharedPreferences("it.barker.barker", Context.MODE_PRIVATE);
-		String u = pref.getString("USER", null);
-		String p = pref.getString("PASSWORD", null);
+		SharedPreferences pref = getSharedPreferences(Tools.SHAREDPREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+		String u = pref.getString(USER, null);
+		String p = pref.getString(PASSWORD, null);
 
 		if(u != null && p != null)
 			DoLogin(u, p);
@@ -77,13 +77,14 @@ public class Login extends Activity {
 		{	
 			spinner.dismiss();
 			
-			SharedPreferences pref = getSharedPreferences("it.barker.barker", Context.MODE_PRIVATE);
-			pref.edit().putString(USER, u);
-			pref.edit().putString(PASSWORD, p);
+			SharedPreferences pref = getSharedPreferences(Tools.SHAREDPREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+			pref.edit().putString(USER, u).commit();
+			pref.edit().putString(PASSWORD, p).commit();
 			App42API.setLoggedInUser(u);
 			
 			Intent vIntent = new Intent(Login.this, MainActivity.class);
 			startActivity(vIntent);
+			finish();
 		}
 		public void onException(final Exception ex) 
 		{

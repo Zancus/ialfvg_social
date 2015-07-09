@@ -5,4 +5,5 @@ public class Tools {
 	public static final String SECRET_KEY = "88da6d584ae244ae9c07d8044fff5dabe1c4ce092be6de3b3f24db3a96e291aa";
 	public static final String dbName = "BARKER";
 	public static final String GOOGLE_PROJECT_NO = "755731294501";
+	public static final String SHAREDPREFERENCES_FILE_NAME = "it.barker.barker";
 }
