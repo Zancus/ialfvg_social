@@ -9,13 +9,17 @@ import it.barker.R;
 
 import com.shephertz.app42.paas.sdk.android.App42API;
 import com.shephertz.app42.paas.sdk.android.App42CallBack;
+import com.shephertz.app42.paas.sdk.android.App42Exception;
+
 import com.shephertz.app42.paas.sdk.android.upload.Upload;
 import com.shephertz.app42.paas.sdk.android.upload.UploadFileType;
 import com.shephertz.app42.paas.sdk.android.upload.UploadService;
 import com.shephertz.app42.paas.sdk.android.util.Base64.InputStream;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
+
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -127,8 +131,13 @@ public class Registration extends Activity {
 		  else 
 		    return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
 	}
+
 	private void DoRegistration(final String u, String m, String p)
-	{                       
+	{
+	final ProgressDialog spinner = new ProgressDialog(this);
+	spinner.setTitle("Loading..");
+	spinner.show();
+	
 		BarkerServices.instance().userService.createUser(u, p, m, new App42CallBack() {  
 		public void onSuccess(Object response)   
 		{  
@@ -167,17 +176,32 @@ public class Registration extends Activity {
 			}
 			Intent vIntent = new Intent(Registration.this, Login.class);
 			startActivity(vIntent);
+
 		}  
 		public void onException(final Exception ex)   
 		{   
+			spinner.dismiss();
 			runOnUiThread(new Runnable() {
-				public void run() {
-					Toast.makeText(getApplicationContext(), "" + ex.getMessage().toString(), Toast.LENGTH_SHORT).show();
+			public void run() {
+				
+				String error = "";
+				App42Exception exception = (App42Exception)ex;
+				int appErrorCode  = exception.getAppErrorCode();  
+				
+				switch (appErrorCode) 
+				{
+					case 2001: error = error+" Username already exists"; break;
+					case 2005: error = error+" Email already exists"; break;
+					default: error = error + ex.getMessage().toString();
 				}
+				
+				Toast.makeText(getApplicationContext(), "" + error, Toast.LENGTH_SHORT).show();
+				
+			}
 			});
 		}  
 		}); 
-	}
+	}//reg
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {

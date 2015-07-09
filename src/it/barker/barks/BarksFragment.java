@@ -8,6 +8,7 @@ import java.util.Date;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.shephertz.app42.paas.sdk.android.App42API;
 import com.shephertz.app42.paas.sdk.android.App42CallBack;
 import com.shephertz.app42.paas.sdk.android.storage.Storage;
 
@@ -37,8 +38,7 @@ public class BarksFragment extends Fragment {
 
 	
 	
-	public static BarksFragment newInstance()
-	{
+	public static BarksFragment newInstance() {
 		return new BarksFragment();
 	}
 
@@ -51,20 +51,20 @@ public class BarksFragment extends Fragment {
 			public void onClick(View v) {
 				Bark bark = new Bark("000", "Ciao", new Date());
 				BarkerServices.instance().storageService.insertJSONDocument(
-						Tools.dbName, Bark.collectionName, bark.getJSON(), new App42CallBack() {
-							public void onSuccess(Object response) {
-							    getActivity().runOnUiThread(new Runnable() {
-									@Override
-									public void run() {
-										getBarks();
-									}
-								});
-							}
-							public void onException(Exception ex) {
-								Toast.makeText(getActivity(), "Non riesco a salvare il messaggio", Toast.LENGTH_SHORT).show();
-							}
+					Tools.dbName, Bark.collectionName, bark.getJSON(), new App42CallBack() {
+						public void onSuccess(Object response) {
+						    getActivity().runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									getBarks();
+								}
+							});
 						}
-					);
+						public void onException(Exception ex) {
+							Toast.makeText(getActivity(), "Non riesco a salvare il messaggio", Toast.LENGTH_SHORT).show();
+						}
+					}
+				);
 			}
 		});
 		
@@ -82,39 +82,37 @@ public class BarksFragment extends Fragment {
 	{
 		BarkerServices.instance().storageService.findAllDocuments(
 				Tools.dbName, Bark.collectionName, new App42CallBack() {  
-			public void onSuccess(Object response)
-			{
-			    Storage  storage  = (Storage )response;
-			    ArrayList<Storage.JSONDocument> jsonDocList = storage.getJsonDocList();
-			    ArrayList<Bark> barks = new ArrayList<Bark>();
-			    Bark bark;
-			    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-			    
-			    for(int i=0;i<jsonDocList.size();i++)
-			    {
-			        try {
-						JSONObject jsonObject = new JSONObject(jsonDocList.get(i).getJsonDoc());
-						bark = new Bark(jsonObject.getString(Bark.TAG_USERID),
-								jsonObject.getString(Bark.TAG_MESSAGE),
-								df.parse(jsonObject.getString(Bark.TAG_DATE)));
-						barks.add(bark);
-					} catch (JSONException e) {
-						e.printStackTrace();
-					} catch (ParseException e) {
-						e.printStackTrace();
-					}
-			    }
-			    barksAdapter = new BarkAdapter(getActivity(), barks);
-			    getActivity().runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						rvbarks.setAdapter(barksAdapter);						
-					}
-				});
-			}  
-			public void onException(Exception ex) {  
-			    System.out.println("Exception Message"+ex.getMessage());          
-			}  
+				public void onSuccess(Object response) {
+				    Storage  storage  = (Storage )response;
+				    ArrayList<Storage.JSONDocument> jsonDocList = storage.getJsonDocList();
+				    ArrayList<Bark> barks = new ArrayList<Bark>();
+				    Bark bark;
+				    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+				    
+				    for(int i=0;i<jsonDocList.size();i++) {
+				        try {
+							JSONObject jsonObject = new JSONObject(jsonDocList.get(i).getJsonDoc());
+							bark = new Bark(jsonObject.getString(Bark.TAG_USERID),
+									jsonObject.getString(Bark.TAG_MESSAGE),
+									df.parse(jsonObject.getString(Bark.TAG_DATE)));
+							barks.add(bark);
+						} catch (JSONException e) {
+							e.printStackTrace();
+						} catch (ParseException e) {
+							e.printStackTrace();
+						}
+				    }
+				    barksAdapter = new BarkAdapter(getActivity(), barks);
+				    getActivity().runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							rvbarks.setAdapter(barksAdapter);						
+						}
+					});
+				}
+				public void onException(Exception ex) {  
+				    System.out.println("Exception Message"+ex.getMessage());          
+				}
 			});
 	}
 }
