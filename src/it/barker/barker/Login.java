@@ -2,11 +2,15 @@ package it.barker.barker;
 
 import it.barker.R;
 
+import com.shephertz.app42.paas.sdk.android.App42API;
 import com.shephertz.app42.paas.sdk.android.App42CallBack;
+import com.shephertz.app42.paas.sdk.android.App42Exception;
 import com.shephertz.app42.paas.sdk.android.user.User;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +20,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class Login extends Activity {
+	protected static final String USER = null;
+	protected static final String PASSWORD = null;
 	Button bLogin, bRegistration;
 	EditText eUser, ePass;
 	
@@ -23,6 +29,14 @@ public class Login extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
+		
+		SharedPreferences pref = getSharedPreferences("it.barker.barker", Context.MODE_PRIVATE);
+		String u = pref.getString("USER", null);
+		String p = pref.getString("PASSWORD", null);
+
+		if(!u.equals(null) && !p.equals(null))
+			DoLogin(u, p);
+		
 		bLogin = (Button)findViewById(R.id.bLogin);
 		bRegistration = (Button)findViewById(R.id.bRegistration);
 		eUser = (EditText)findViewById(R.id.eUsername);
@@ -39,8 +53,7 @@ public class Login extends Activity {
 					DoLogin(eUser.getText().toString(), ePass.getText().toString());
 				else
 					Toast.makeText(getApplicationContext(), "Recheck:" + error, Toast.LENGTH_SHORT).show();
-		 
-			}
+		 	}
 		});
 		
 		bRegistration.setOnClickListener(new View.OnClickListener() {
@@ -49,12 +62,12 @@ public class Login extends Activity {
 			public void onClick(View v) {
 				
 				Intent vIntent = new Intent(Login.this, Registration.class);
-				startActivity(vIntent);
+				startActivityForResult(vIntent, 0);
 			}
 		});
 	}//create
 	
-	private void DoLogin(String u, String p){
+	private void DoLogin(final String u, final String p){
 		
 		final ProgressDialog spinner = new ProgressDialog(this);
 		spinner.setTitle("Loading..");
@@ -64,20 +77,34 @@ public class Login extends Activity {
 		public void onSuccess(Object response)
 		{	
 			spinner.dismiss();
-			User user = (User)response;
-			System.out.println("userName is " + user.getUserName());  
-			System.out.println("sessionId is " + user.getSessionId());  
+			
+			SharedPreferences pref = getSharedPreferences("it.barker.barker", Context.MODE_PRIVATE);
+			pref.edit().putString(USER, u);
+			pref.edit().putString(PASSWORD, p);
+			App42API.setLoggedInUser(u);
 			
 			Intent vIntent = new Intent(Login.this, MainActivity.class);
 			startActivity(vIntent);
 		}
 		public void onException(final Exception ex) 
 		{
-			runOnUiThread(new Runnable() {
-				public void run() {
-					Toast.makeText(getApplicationContext(), "" + ex.getMessage().toString(), Toast.LENGTH_SHORT).show();
+		 spinner.dismiss();
+		 runOnUiThread(new Runnable() {
+			public void run() {
+				
+				String error = "";
+				App42Exception exception = (App42Exception)ex;
+				int appErrorCode  = exception.getAppErrorCode();  
+				
+				switch (appErrorCode) 
+				{
+					case 2002: error = error+" Username/Password did not match"; break;
+					default: error = error + ex.getMessage().toString();
 				}
-			});
+				
+				Toast.makeText(getApplicationContext(), "" + error, Toast.LENGTH_SHORT).show();
+			}
+		 });
 		}
 		});
 

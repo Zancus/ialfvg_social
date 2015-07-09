@@ -16,14 +16,31 @@
 
 		<RelativeLayout
 		    android:layout_width="match_parent"
-		    android:layout_height="match_parent" >
+		    android:layout_height="match_parent"
+		    android:layout_marginLeft="5dp" >
 
-			<TextView
-			    android:id="@+id/userrname"
+			<LinearLayout
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
-			    android:text="Large Text"
-			    android:textAppearance="?android:attr/textAppearanceLarge" />
+			    android:layout_alignParentLeft="true"
+			    android:layout_alignParentRight="true"
+			    android:orientation="vertical" >
+
+				<TextView
+				    android:id="@+id/userrname"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:text="Large Text"
+				    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+				<TextView
+				    android:id="@+id/emailuser"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:text="Medium Text"
+				    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+			</LinearLayout>
 
 		</RelativeLayout>
 

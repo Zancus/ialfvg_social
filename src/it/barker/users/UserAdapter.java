@@ -29,12 +29,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserVH>{
 	public class UserVH extends ViewHolder {
 
 		CardView cvuser;
-		TextView username;
+		TextView username, emailuser;
 		
 		public UserVH(View arg0) {
 			super(arg0);
 			cvuser = (CardView) arg0.findViewById(R.id.cvuser);
 			username = (TextView) arg0.findViewById(R.id.userrname);
+			emailuser = (TextView) arg0.findViewById(R.id.emailuser);
 		}
 
 	}
@@ -47,7 +48,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserVH>{
 	@Override
 	public void onBindViewHolder(UserVH arg0, int arg1) {
 		// TODO Auto-generated method stub
-		arg0.username.setText(users.get(arg1).userName);
+		arg0.username.setText(users.get(arg1).getUserName());
+		arg0.emailuser.setText(users.get(arg1).getEmail());
 	}
 
 	@Override
