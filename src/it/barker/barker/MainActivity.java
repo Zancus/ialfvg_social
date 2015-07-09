@@ -62,11 +62,11 @@ public class MainActivity extends AppCompatActivity {
 				
 				switch (position) {
 					case 0:
-						return BarksFragment.newInstance(Tools.TUTTIBARKS);
+						return BarksFragment.newInstance(Tools.TUTTIBARKS, "nessuno");
 					case 1:
 						return UsersFragment.newInstance();
 					case 2:
-						return new PlaceHolder();
+						return BarksFragment.newInstance(Tools.UTENTEBARKS, App42API.getLoggedInUser());
 					default:
 						return null;
 				}

@@ -45,11 +45,12 @@ public class BarksFragment extends Fragment implements IBarksCallback {
 	private RecyclerView rvbarks;
 	private BarkAdapter barksAdapter;
 	
-	public static BarksFragment newInstance(String operazione)
+	public static BarksFragment newInstance(String operazione, String utente)
 	{
 		BarksFragment barksfrag = new BarksFragment();
 		Bundle barksbundle = new Bundle();
 		barksbundle.putString(OPERAZIONE, operazione);
+		barksbundle.putString(UTENTE, utente);
 		barksfrag.setArguments(barksbundle);
 		return barksfrag;
 	}
@@ -75,10 +76,11 @@ public class BarksFragment extends Fragment implements IBarksCallback {
 		if(getbarksbundle != null)
 		{
 			azione = getbarksbundle.getString(OPERAZIONE);
+			user = getbarksbundle.getString(UTENTE);
 		}
-		if(azione.equals(Tools.TUTTIBARKS))
+		if(azione.equals(Tools.TUTTIBARKS) && user.equals("nessuno"))
 			getBarks();
-		else if(azione.equals(Tools.UTENTEBARKS))
+		else if(azione.equals(Tools.UTENTEBARKS) && !(user.equals("nessuno")))
 			getBarksFromUser();
 		rvbarks.setAdapter(null);
 		return barksview;
@@ -133,7 +135,7 @@ public class BarksFragment extends Fragment implements IBarksCallback {
 	
 	private void getBarksFromUser() {
 		// TODO Auto-generated method stub
-		Query q1 = QueryBuilder.build("userId", App42API.userSessionId, Operator.EQUALS); // Build query q1 for key1 equal to name and value1 equal to Nick  
+		Query q1 = QueryBuilder.build("userId", user, Operator.EQUALS); // Build query q1 for key1 equal to name and value1 equal to Nick  
 		//Query query = QueryBuilder.compoundOperator(q1);
 		
 		BarkerServices.instance().storageService.findDocumentsByQuery

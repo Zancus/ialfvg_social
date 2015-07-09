@@ -57,7 +57,7 @@ public class DettaglioUtenteActivity extends AppCompatActivity implements IBarks
 		Query q1 = QueryBuilder.build("userId", nomeutente, Operator.EQUALS); // Build query q1 for key1 equal to name and value1 equal to Nick  
 		//Query query = QueryBuilder.compoundOperator(q1); 
 		getSupportFragmentManager().beginTransaction()
-		.replace(R.id.barkscontainer, BarksFragment.newInstance(Tools.UTENTEBARKS), BarksFragment.TAG).commit();
+		.replace(R.id.barkscontainer, BarksFragment.newInstance(Tools.UTENTEBARKS, nomeutente), BarksFragment.TAG).commit();
 	}
 
 	private void setupGUI() {
