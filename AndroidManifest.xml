@@ -10,6 +10,13 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+	
+	<uses-permission android:name="android.permission.CAMERA" />
+  	<uses-feature android:name="android.hardware.camera" />
+  	<uses-feature android:name="android.hardware.camera.autofocus" />
+  	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+
     
     
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />  
@@ -26,12 +33,7 @@
 	        <meta-data  
 	            android:name="onMessageOpen"  
 	            android:value="com.example.app42Sample.MainActivity" />  
-    
-    
-    
-    
-    
-    
+   
     
     <application
         android:name="it.barker.barker.BarkerApplication"
@@ -69,6 +71,7 @@
         <activity android:name="it.barker.barker.DetailActivity" />
         <activity
             android:name="it.barker.barker.Login"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_login" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -77,6 +80,7 @@
         </activity>
         <activity
             android:name="it.barker.barker.Registration"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_registration" >
         </activity>
     </application>
