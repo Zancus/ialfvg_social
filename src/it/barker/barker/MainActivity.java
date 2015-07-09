@@ -1,9 +1,18 @@
 package it.barker.barker;
 
+import com.shephertz.app42.paas.sdk.android.App42API;
+import it.barker.push.App42GCMService;
+
 import it.barker.barks.BarksFragment;
+import it.barker.push.App42GCMController;
+import it.barker.push.App42GCMController.App42GCMListener;
 import it.barker.users.UsersFragment;
 import it.barker.R;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -14,11 +23,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -71,6 +80,65 @@ public class MainActivity extends AppCompatActivity {
 		tabLayout.setupWithViewPager(viewPager);
 	}
 
+	public void onStart() {
+		super.onStart();
+		if (App42GCMController.isPlayServiceAvailable(this)) {
+			App42GCMController.getRegistrationId(this, Tools.GOOGLE_PROJECT_NO, new App42GCMListener() {
+				
+				@Override
+				public void onRegisterApp42(String responseMessage) {
+					App42GCMController.storeApp42Success(MainActivity.this);
+					Log.d("push", "onRegisterApp42");
+				}
+				
+				@Override
+				public void onGCMRegistrationId(String gcmRegId) {
+					App42GCMController.storeRegistrationId(MainActivity.this, gcmRegId);
+					if(!App42GCMController.isApp42Registerd(MainActivity.this))
+						App42GCMController.registerOnApp42(App42API.getLoggedInUser(), gcmRegId, this);
+					Log.d("push", "onGCMRegistrationId");
+				}
+				
+				@Override
+				public void onError(String errorMsg) {
+					Log.w("push", errorMsg);
+				}
+				
+				@Override
+				public void onApp42Response(String responseMessage) {
+					Log.d("pushmsg", responseMessage);
+				}
+			});
+		} else {
+			Log.i("App42PushNotification",
+					"No valid Google Play Services APK found.");
+		}
+	}
+	
+	public void onPause() {
+		super.onPause();
+		unregisterReceiver(mBroadcastReceiver);
+	}
+	
+	public void onResume() {
+		super.onResume();
+		String message = getIntent().getStringExtra(App42GCMService.ExtraMessage);
+		if (message != null)
+			Log.d("MainActivity-onResume", "Message Recieved :" + message);
+		IntentFilter filter = new IntentFilter(App42GCMService.DisplayMessageAction);
+		filter.setPriority(2);
+		registerReceiver(mBroadcastReceiver, filter);
+	}
+
+	final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String message = intent.getStringExtra(App42GCMService.ExtraMessage);
+			Log.i("MainActivity-BroadcastReceiver", "Message Recieved " + " : "
+					+ message);
+		}
+	};
+	
 	public static class PlaceHolder extends Fragment {
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,

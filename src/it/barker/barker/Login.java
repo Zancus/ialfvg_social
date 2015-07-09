@@ -5,7 +5,6 @@ import it.barker.R;
 import com.shephertz.app42.paas.sdk.android.App42API;
 import com.shephertz.app42.paas.sdk.android.App42CallBack;
 import com.shephertz.app42.paas.sdk.android.App42Exception;
-import com.shephertz.app42.paas.sdk.android.user.User;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -34,7 +33,7 @@ public class Login extends Activity {
 		String u = pref.getString("USER", null);
 		String p = pref.getString("PASSWORD", null);
 
-		if(!u.equals(null) && !p.equals(null))
+		if(u != null && p != null)
 			DoLogin(u, p);
 		
 		bLogin = (Button)findViewById(R.id.bLogin);
