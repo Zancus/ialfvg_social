@@ -13,6 +13,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -90,12 +91,16 @@ public class MainActivity extends AppCompatActivity {
 	
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            return true;
+            SharedPreferences preferences = getSharedPreferences(Tools.SHAREDPREFERENCES_FILE_NAME, MODE_PRIVATE);
+            preferences.edit().remove(Login.USER).commit();
+            preferences.edit().remove(Login.PASSWORD).commit();
+            Intent intent = new  Intent(this, Login.class);
+            startActivity(intent);
+            finish();
+            
+        	return true;
         }
         return super.onOptionsItemSelected(item);
     }
