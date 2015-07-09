@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.loopj.android.image.SmartImageView;
 import com.shephertz.app42.paas.sdk.android.user.User;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserVH>{
@@ -29,11 +30,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserVH>{
 	public class UserVH extends ViewHolder {
 
 		CardView cvuser;
+		SmartImageView imgUser;
 		TextView username, emailuser;
 		
 		public UserVH(View arg0) {
 			super(arg0);
 			cvuser = (CardView) arg0.findViewById(R.id.cvuser);
+			imgUser = (SmartImageView) arg0.findViewById(R.id.imgUser);
 			username = (TextView) arg0.findViewById(R.id.userrname);
 			emailuser = (TextView) arg0.findViewById(R.id.emailuser);
 		}

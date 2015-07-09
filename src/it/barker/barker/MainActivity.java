@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 				
 				switch (position) {
 					case 0:
-						return BarksFragment.newInstance();
+						return BarksFragment.newInstance(Tools.TUTTIBARKS);
 					case 1:
 						return UsersFragment.newInstance();
 					case 2:

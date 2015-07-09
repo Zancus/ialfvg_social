@@ -20,11 +20,13 @@ public class BarkAdapter extends RecyclerView.Adapter<BarkAdapter.BarkVH> {
 
 	private FragmentActivity context;
 	private ArrayList<Bark> barks;
+	private IBarksCallback y;
 	
-	public BarkAdapter(FragmentActivity context, ArrayList<Bark> barks) {
+	public BarkAdapter(FragmentActivity context, ArrayList<Bark> barks, IBarksCallback x) {
 		super();
 		this.context = context;
 		this.barks = barks;
+		this.y = x;
 	}
 
 	public class BarkVH extends ViewHolder{
@@ -59,6 +61,8 @@ public class BarkAdapter extends RecyclerView.Adapter<BarkAdapter.BarkVH> {
 			@Override
 			public void onClick(View v) {
 				ReBarkDialog rebark = ReBarkDialog.newInstance(barks.get(arg1));
+				BarksFragment frag = (BarksFragment)y;
+				rebark.setTargetFragment(frag, 2);
 				rebark.show(context.getSupportFragmentManager(), "aa");
 			}
 		});

@@ -12,5 +12,6 @@
     <string name="MyProfile">My profile</string>
     <string name="title_activity_login">Login</string>
     <string name="title_activity_registration">Registration</string>
+    <string name="title_activity_dettaglio_bark">DettaglioBarkActivity</string>
 
 </resources>
