@@ -64,6 +64,7 @@ public class BarksFragment extends Fragment implements IBarksCallback {
 				NewBarkDialog newbark = NewBarkDialog.newInstance();
 				newbark.setTargetFragment(BarksFragment.this, 1);
 				newbark.show(getFragmentManager(), "new bark");
+
 			}
 		});
 		
@@ -93,6 +94,7 @@ public class BarksFragment extends Fragment implements IBarksCallback {
 	{
 		BarkerServices.instance().storageService.findAllDocuments(
 				Tools.dbName, Bark.collectionName, new App42CallBack() {  
+
 			public void onSuccess(Object response)
 			{
 			    Storage  storage  = (Storage)response;

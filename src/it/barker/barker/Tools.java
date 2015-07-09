@@ -9,4 +9,7 @@ public class Tools {
 	public static final String IMG_UTENTE = "imgutente";
 	public static final String TUTTIBARKS = "tuttibarks";
 	public static final String UTENTEBARKS = "utentebarks";
+
+	public static final String GOOGLE_PROJECT_NO = "755731294501";
+	public static final String SHAREDPREFERENCES_FILE_NAME = "it.barker.barker";
 }

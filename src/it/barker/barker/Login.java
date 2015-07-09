@@ -2,12 +2,14 @@ package it.barker.barker;
 
 import it.barker.R;
 
+import com.shephertz.app42.paas.sdk.android.App42API;
 import com.shephertz.app42.paas.sdk.android.App42CallBack;
 import com.shephertz.app42.paas.sdk.android.App42Exception;
-import com.shephertz.app42.paas.sdk.android.user.User;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +19,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class Login extends Activity {
+	public static final String USER = "USER";
+	public static final String PASSWORD = "PASSWORD";
 	Button bLogin, bRegistration;
 	EditText eUser, ePass;
 	
@@ -24,6 +28,14 @@ public class Login extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
+		
+		SharedPreferences pref = getSharedPreferences(Tools.SHAREDPREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+		String u = pref.getString(USER, null);
+		String p = pref.getString(PASSWORD, null);
+
+		if(u != null && p != null)
+			DoLogin(u, p);
+		
 		bLogin = (Button)findViewById(R.id.bLogin);
 		bRegistration = (Button)findViewById(R.id.bRegistration);
 		eUser = (EditText)findViewById(R.id.eUsername);
@@ -54,7 +66,7 @@ public class Login extends Activity {
 		});
 	}//create
 	
-	private void DoLogin(String u, String p){
+	private void DoLogin(final String u, final String p){
 		
 		final ProgressDialog spinner = new ProgressDialog(this);
 		spinner.setTitle("Loading..");
@@ -65,8 +77,14 @@ public class Login extends Activity {
 		{	
 			spinner.dismiss();
 			
+			SharedPreferences pref = getSharedPreferences(Tools.SHAREDPREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+			pref.edit().putString(USER, u).commit();
+			pref.edit().putString(PASSWORD, p).commit();
+			App42API.setLoggedInUser(u);
+			
 			Intent vIntent = new Intent(Login.this, MainActivity.class);
 			startActivity(vIntent);
+			finish();
 		}
 		public void onException(final Exception ex) 
 		{
