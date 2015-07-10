@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import com.shephertz.app42.paas.sdk.android.App42API;
 import com.shephertz.app42.paas.sdk.android.App42CallBack;
+import com.shephertz.app42.paas.sdk.android.App42Exception;
 import com.shephertz.app42.paas.sdk.android.storage.Query;
 import com.shephertz.app42.paas.sdk.android.storage.QueryBuilder;
 import com.shephertz.app42.paas.sdk.android.storage.Storage;
@@ -28,6 +29,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -87,21 +89,28 @@ public class BarksFragment extends Fragment implements IBarksCallback {
 				getBarksFromUser();
 				fabButton.setVisibility(View.GONE);
 
-				Query q1 = QueryBuilder.build(Followers.TAG_USER, App42API.userSessionId, Operator.EQUALS);
-				Query q2 = QueryBuilder.build(Followers.TAG_USER_TO_FOLLOW, userToFollow, Operator.EQUALS);
-				Query q3 = QueryBuilder.compoundOperator(q1, Operator.AND, q2);
-				BarkerServices.instance().storageService.findDocumentsByQuery
-					(Tools.dbName, Followers.collectionName, q3, new App42CallBack() {
-						@Override
-						public void onSuccess(Object response) {
-							Storage storage = (Storage) response;
-							if(storage.getJsonDocList().size() == 0) {
-								fabButton.setVisibility(View.VISIBLE);
+				if(! userToFollow.equals(App42API.loggedInUser)) {
+					Query q1 = QueryBuilder.build(Followers.TAG_USER, App42API.getLoggedInUser(), Operator.EQUALS);
+					Query q2 = QueryBuilder.build(Followers.TAG_USER_TO_FOLLOW, userToFollow, Operator.EQUALS);
+					Query q3 = QueryBuilder.compoundOperator(q1, Operator.AND, q2);
+					BarkerServices.instance().storageService.findDocumentsByQuery
+						(Tools.dbName, Followers.collectionName, q3, new App42CallBack() {
+							@Override
+							public void onSuccess(Object response) { }
+							@Override
+							public void onException(Exception ex) {
+								App42Exception exception = (App42Exception)ex;  
+							    if(exception.getAppErrorCode() == 2608) {
+							    	getActivity().runOnUiThread(new Runnable() {
+										@Override
+										public void run() {
+											fabButton.setVisibility(View.VISIBLE);								
+										}
+									});
+								}
 							}
-						}
-						@Override
-						public void onException(Exception arg0) { }
-					});
+						});
+				}
 				
 				fabClickListener = new OnClickListener() {
 					@Override
@@ -132,7 +141,13 @@ public class BarksFragment extends Fragment implements IBarksCallback {
 					Snackbar.make(getView(), "Da ora segui questo utente", Snackbar.LENGTH_SHORT).show();
 					IBarksCallback barksfrag = (IBarksCallback)getTargetFragment();
 					progressDialog.dismiss();
-					barksfrag.onSuccess();
+					getActivity().runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							getView().findViewById(R.id.fabBtn).setVisibility(View.GONE);
+						}
+					});
+					//barksfrag.onSuccess();
 				}
 
 				@Override
@@ -189,7 +204,7 @@ public class BarksFragment extends Fragment implements IBarksCallback {
 	}
 	
 	private void getBarksFromUser() {
-		Query q1 = QueryBuilder.build("userId", App42API.userSessionId, Operator.EQUALS); // Build query q1 for key1 equal to name and value1 equal to Nick  
+		Query q1 = QueryBuilder.build("userId", userToFollow, Operator.EQUALS); // Build query q1 for key1 equal to name and value1 equal to Nick  
 		//Query query = QueryBuilder.compoundOperator(q1);
 		
 		BarkerServices.instance().storageService.findDocumentsByQuery
