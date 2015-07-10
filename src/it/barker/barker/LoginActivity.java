@@ -18,7 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class Login extends Activity {
+public class LoginActivity extends Activity {
 	public static final String USER = "USER";
 	public static final String PASSWORD = "PASSWORD";
 	Button bLogin, bRegistration;
@@ -60,7 +60,7 @@ public class Login extends Activity {
 			@Override
 			public void onClick(View v) {
 				
-				Intent vIntent = new Intent(Login.this, Registration.class);
+				Intent vIntent = new Intent(LoginActivity.this, Registration.class);
 				startActivityForResult(vIntent, 0);
 			}
 		});
@@ -82,7 +82,7 @@ public class Login extends Activity {
 			pref.edit().putString(PASSWORD, p).commit();
 			App42API.setLoggedInUser(u);
 			
-			Intent vIntent = new Intent(Login.this, MainActivity.class);
+			Intent vIntent = new Intent(LoginActivity.this, MainActivity.class);
 			startActivity(vIntent);
 			finish();
 		}

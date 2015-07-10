@@ -82,13 +82,11 @@ public class NewBarkDialog extends DialogFragment {
 
 								@Override
 								public void onException(Exception arg0) {
-									// TODO Auto-generated method stub
 									//Snackbar.make(viewnewbark, "Errore!", Snackbar.LENGTH_SHORT).show();
 								}
 
 								@Override
 								public void onSuccess(Object arg0) {
-									// TODO Auto-generated method stub
 									IBarksCallback barksfrag = (IBarksCallback)getTargetFragment();
 									progressdialog.dismiss();
 									dialognewbark.dismiss();

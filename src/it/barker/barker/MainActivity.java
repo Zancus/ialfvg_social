@@ -61,8 +61,11 @@ public class MainActivity extends AppCompatActivity {
 			public Fragment getItem(int position) {
 				
 				switch (position) {
-					case 0:
-						return BarksFragment.newInstance(Tools.TUTTIBARKS);
+					case 0: {
+						Bundle bundle = new Bundle();
+						bundle.putString(BarksFragment.OPERAZIONE, Tools.TUTTIBARKS);
+						return BarksFragment.newInstance(bundle);
+					}
 					case 1:
 						return UsersFragment.newInstance();
 					case 2:
@@ -94,9 +97,9 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             SharedPreferences preferences = getSharedPreferences(Tools.SHAREDPREFERENCES_FILE_NAME, MODE_PRIVATE);
-            preferences.edit().remove(Login.USER).commit();
-            preferences.edit().remove(Login.PASSWORD).commit();
-            Intent intent = new  Intent(this, Login.class);
+            preferences.edit().remove(LoginActivity.USER).commit();
+            preferences.edit().remove(LoginActivity.PASSWORD).commit();
+            Intent intent = new  Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();
             

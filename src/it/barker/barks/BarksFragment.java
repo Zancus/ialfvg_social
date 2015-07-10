@@ -3,7 +3,6 @@ package it.barker.barks;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,11 +17,14 @@ import com.shephertz.app42.paas.sdk.android.storage.QueryBuilder.Operator;
 import it.barker.barker.BarkerServices;
 import it.barker.barker.Tools;
 import it.barker.models.Bark;
-import it.barker.users.DettaglioUtenteActivity;
+import it.barker.models.Followers;
 import it.barker.R;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -32,25 +34,24 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 
-import android.widget.Toast;
-
 public class BarksFragment extends Fragment implements IBarksCallback {
 
 	public static final String TAG = "barksfragment";
 	public static final String OPERAZIONE = "operazione";
 	public static final String UTENTE = "utente";
-	private String azione, user;
-	private Bundle getbarksbundle;
+	public static final String USER_TO_FOLLOW = "USER_TO_FOLLOW";
+	private String azione;
+	private String userToFollow;
+	private Bundle barksBundle;
 	
 	private RecyclerView rvbarks;
 	private BarkAdapter barksAdapter;
+	private ProgressDialog progressDialog;
 	
-	public static BarksFragment newInstance(String operazione)
+	public static BarksFragment newInstance(Bundle bundle)
 	{
 		BarksFragment barksfrag = new BarksFragment();
-		Bundle barksbundle = new Bundle();
-		barksbundle.putString(OPERAZIONE, operazione);
-		barksfrag.setArguments(barksbundle);
+		barksfrag.setArguments(bundle);
 		return barksfrag;
 	}
 
@@ -58,35 +59,91 @@ public class BarksFragment extends Fragment implements IBarksCallback {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View barksview = inflater.inflate(R.layout.fragment_barks, null);
 		
-		barksview.findViewById(R.id.fabBtn).setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				NewBarkDialog newbark = NewBarkDialog.newInstance();
-				newbark.setTargetFragment(BarksFragment.this, 1);
-				newbark.show(getFragmentManager(), "new bark");
-
-			}
-		});
-		
+		final FloatingActionButton fabButton = (FloatingActionButton) barksview.findViewById(R.id.fabBtn);
 		rvbarks = (RecyclerView) barksview.findViewById(R.id.rvbarks);
 		LinearLayoutManager llm = new LinearLayoutManager(getActivity());
 		rvbarks.setLayoutManager(llm);
-		getbarksbundle = getArguments();
-		if(getbarksbundle != null)
-		{
-			azione = getbarksbundle.getString(OPERAZIONE);
-		}
-		if(azione.equals(Tools.TUTTIBARKS))
-			getBarks();
-		else if(azione.equals(Tools.UTENTEBARKS))
-			getBarksFromUser();
 		rvbarks.setAdapter(null);
+
+		OnClickListener fabClickListener = null;
+		barksBundle = getArguments();
+		if(barksBundle != null)
+		{
+			azione = barksBundle.getString(OPERAZIONE);
+			
+			if(azione.equals(Tools.TUTTIBARKS)) {
+				getBarks();
+				fabClickListener = new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						NewBarkDialog newbark = NewBarkDialog.newInstance();
+						newbark.setTargetFragment(BarksFragment.this, 1);
+						newbark.show(getFragmentManager(), "new bark");
+					}
+				};
+			}
+			else if(azione.equals(Tools.UTENTEBARKS)) {
+				userToFollow = barksBundle.getString(USER_TO_FOLLOW);
+				getBarksFromUser();
+				fabButton.setVisibility(View.GONE);
+
+				Query q1 = QueryBuilder.build(Followers.TAG_USER, App42API.userSessionId, Operator.EQUALS);
+				Query q2 = QueryBuilder.build(Followers.TAG_USER_TO_FOLLOW, userToFollow, Operator.EQUALS);
+				Query q3 = QueryBuilder.compoundOperator(q1, Operator.AND, q2);
+				BarkerServices.instance().storageService.findDocumentsByQuery
+					(Tools.dbName, Followers.collectionName, q3, new App42CallBack() {
+						@Override
+						public void onSuccess(Object response) {
+							Storage storage = (Storage) response;
+							if(storage.getJsonDocList().size() == 0) {
+								fabButton.setVisibility(View.VISIBLE);
+							}
+						}
+						@Override
+						public void onException(Exception arg0) { }
+					});
+				
+				fabClickListener = new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						follow();
+					}
+				};
+			}
+		}
+		
+		fabButton.setOnClickListener(fabClickListener);
+		
 		return barksview;
 	}
 
+	private void follow() {
+		Followers followers = new Followers(App42API.getLoggedInUser(), userToFollow);
+		progressDialog = new ProgressDialog(getActivity());
+		progressDialog.setMessage("Attendi...");
+		progressDialog.show();
+		progressDialog.setCancelable(false);
+		progressDialog.setCanceledOnTouchOutside(false);
+		BarkerServices.instance().storageService.insertJSONDocument(
+			Tools.dbName, Followers.collectionName, followers.getJSON(), new App42CallBack(){
+	
+				@Override
+				public void onSuccess(Object arg0) {
+					Snackbar.make(getView(), "Da ora segui questo utente", Snackbar.LENGTH_SHORT).show();
+					IBarksCallback barksfrag = (IBarksCallback)getTargetFragment();
+					progressDialog.dismiss();
+					barksfrag.onSuccess();
+				}
+
+				@Override
+				public void onException(Exception arg0) {
+					Snackbar.make(getView(), "Errore, riprova", Snackbar.LENGTH_SHORT).show();
+				}
+		});
+	}
+	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
@@ -132,7 +189,6 @@ public class BarksFragment extends Fragment implements IBarksCallback {
 	}
 	
 	private void getBarksFromUser() {
-		// TODO Auto-generated method stub
 		Query q1 = QueryBuilder.build("userId", App42API.userSessionId, Operator.EQUALS); // Build query q1 for key1 equal to name and value1 equal to Nick  
 		//Query query = QueryBuilder.compoundOperator(q1);
 		
@@ -141,7 +197,6 @@ public class BarksFragment extends Fragment implements IBarksCallback {
 			
 			@Override
 			public void onSuccess(Object arg0) {
-				// TODO Auto-generated method stub
 				    Storage  storage  = (Storage)arg0;
 				    ArrayList<Storage.JSONDocument> jsonDocList = storage.getJsonDocList();
 				    ArrayList<Bark> barks = new ArrayList<Bark>();
@@ -173,7 +228,6 @@ public class BarksFragment extends Fragment implements IBarksCallback {
 			
 			@Override
 			public void onException(Exception arg0) {
-				// TODO Auto-generated method stub
 				System.out.println("Exception Message"+arg0.getMessage());
 			}
 		});
@@ -181,13 +235,11 @@ public class BarksFragment extends Fragment implements IBarksCallback {
 
 	@Override
 	public void onSuccess() {
-		// TODO Auto-generated method stub
 		getBarks();
 	}
 
 	@Override
 	public void onError() {
-		// TODO Auto-generated method stub
 		
 	}
 }

@@ -6,23 +6,23 @@ import org.json.JSONObject;
 public class Followers {
 	public static final String collectionName = "followers";
 	
-	public static final String TAG_USER1 = "user1";
-	public static final String TAG_USER2 = "user2";
+	public static final String TAG_USER = "user";
+	public static final String TAG_USER_TO_FOLLOW = "userToFollow";
 	
 	
-	public String user1;
-	public String user2;
+	public String user;
+	public String userToFollow;
 	
-	public Followers(String user1, String user2) {
-		this.user1 = user1;
-		this.user2 = user2;
+	public Followers(String user, String userToFollow) {
+		this.user = user;
+		this.userToFollow = userToFollow;
 	}
 	
 	public String getJSON() {
 		JSONObject jsonObject = new JSONObject();
 		try {
-			jsonObject.put(TAG_USER1, user1);
-			jsonObject.put(TAG_USER2, user2);
+			jsonObject.put(TAG_USER, user);
+			jsonObject.put(TAG_USER_TO_FOLLOW, userToFollow);
 		} catch (JSONException e) {	e.printStackTrace(); }
 		
 		return jsonObject.toString();

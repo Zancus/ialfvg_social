@@ -163,7 +163,8 @@ public class Registration extends Activity {
 				        System.out.println("fileUrl is :" + fileList.get(i).getUrl());    
 				        System.out.println("Tiny Url is :"+fileList.get(i).getTinyUrl());  
 				        System.out.println("fileDescription is: " + fileList.get(i).getDescription());   
-				    }  
+				    }
+				    
 				}
 
 				@Override
@@ -174,7 +175,8 @@ public class Registration extends Activity {
 				}
 			);
 			}
-			Intent vIntent = new Intent(Registration.this, Login.class);
+			Intent vIntent = new Intent(Registration.this, LoginActivity.class);
+			vIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(vIntent);
 
 		}  

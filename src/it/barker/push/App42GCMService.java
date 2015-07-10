@@ -6,7 +6,7 @@
 package it.barker.push;
 
 import it.barker.R;
-import it.barker.barker.Login;
+import it.barker.barker.LoginActivity;
 import it.barker.barker.MainActivity;
 
 import org.json.JSONException;
@@ -168,7 +168,7 @@ public class App42GCMService extends IntentService {
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			notificationIntent = new Intent(this, Login.class);
+			notificationIntent = new Intent(this, LoginActivity.class);
 		}
 		notificationIntent.putExtra("message_delivered", true);
 		notificationIntent.putExtra(ExtraMessage, msg);

@@ -63,7 +63,7 @@
         </activity>
         <activity android:name=".barker.DetailActivity" />
         <activity
-            android:name="it.barker.barker.Login"
+            android:name="it.barker.barker.LoginActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_login" >
             <intent-filter>
