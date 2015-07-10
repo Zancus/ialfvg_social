@@ -3,6 +3,7 @@ package it.barker.barks;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,6 +17,7 @@ import com.shephertz.app42.paas.sdk.android.storage.Storage;
 import com.shephertz.app42.paas.sdk.android.storage.QueryBuilder.Operator;
 
 import it.barker.barker.BarkerServices;
+import it.barker.barker.DateComparator;
 import it.barker.barker.Tools;
 import it.barker.models.Bark;
 import it.barker.models.Followers;
@@ -163,7 +165,7 @@ public class BarksFragment extends Fragment implements IBarksCallback {
 	}
 
 	public void getBarks()
-	{
+	{		
 		BarkerServices.instance().storageService.findAllDocuments(
 				Tools.dbName, Bark.collectionName, new App42CallBack() {  
 
@@ -189,6 +191,8 @@ public class BarksFragment extends Fragment implements IBarksCallback {
 						e.printStackTrace();
 					}
 			    }
+			    Collections.sort(barks, new DateComparator());
+			    
 			    barksAdapter = new BarkAdapter(getActivity(), barks, BarksFragment.this);
 			    getActivity().runOnUiThread(new Runnable() {
 					@Override
@@ -198,14 +202,14 @@ public class BarksFragment extends Fragment implements IBarksCallback {
 				});
 			}  
 			public void onException(Exception ex) {  
+				App42Exception ecc = (App42Exception)ex;
 			    System.out.println("Exception Message"+ex.getMessage());          
 			}  
 			});
 	}
 	
 	private void getBarksFromUser() {
-		Query q1 = QueryBuilder.build("userId", userToFollow, Operator.EQUALS); // Build query q1 for key1 equal to name and value1 equal to Nick  
-		//Query query = QueryBuilder.compoundOperator(q1);
+		Query q1 = QueryBuilder.build("userId", userToFollow, Operator.EQUALS);
 		
 		BarkerServices.instance().storageService.findDocumentsByQuery
 		(Tools.dbName, Bark.collectionName, q1, new App42CallBack() {
@@ -250,7 +254,10 @@ public class BarksFragment extends Fragment implements IBarksCallback {
 
 	@Override
 	public void onSuccess() {
-		getBarks();
+		if(userToFollow == null)
+			getBarks();
+		else
+			getBarksFromUser();
 	}
 
 	@Override

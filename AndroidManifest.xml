@@ -79,7 +79,7 @@
         </activity>
         <activity
             android:name="it.barker.users.DettaglioUtenteActivity"
-            android:label="@string/title_activity_dettaglio_bark" >
+            android:label="@string/title_activity_dettaglio_utente" >
         </activity>
     </application>
 

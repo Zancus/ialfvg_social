@@ -1,5 +1,6 @@
 package it.barker.models;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.json.JSONException;
@@ -32,7 +33,7 @@ public class Bark implements Parcelable{
 		try {
 			jsonObject.put(TAG_USERID, userId);
 			jsonObject.put(TAG_MESSAGE, message);
-			jsonObject.put(TAG_DATE, com.shephertz.app42.paas.sdk.android.util.Util.getUTCFormattedTimestamp(date));
+			jsonObject.put(TAG_DATE, new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(date));
 		} catch (JSONException e) {	e.printStackTrace(); }
 		
 		return jsonObject.toString();
